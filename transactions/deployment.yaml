@@ -1,0 +1,32 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: transactions
+spec:
+  selector:
+    app: transactions
+  ports:
+  - protocol: TCP
+    port: 8080
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transactions
+spec:
+  selector:
+      matchLabels:
+        app: transactions
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: transactions
+    spec:
+      containers:
+        - name: transactions
+          image: transactions:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
